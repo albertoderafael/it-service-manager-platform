@@ -1,0 +1,237 @@
+/* ===================== Página ===================== */
+@page {
+  size: A4;
+  margin: 22mm 19mm 20mm 19mm;
+  @top-left {
+    content: string(chapter);
+    font: 500 7.5pt "Inter"; color: #64748b; vertical-align: bottom; padding-bottom: 4mm;
+  }
+  @top-right {
+    content: "IT Service & Demand Manager · Guía frontend";
+    font: 500 7.5pt "Inter"; color: #94a3b8; vertical-align: bottom; padding-bottom: 4mm;
+  }
+  @bottom-center {
+    content: counter(page);
+    font: 600 8pt "Inter"; color: #475569;
+  }
+}
+@page cover { margin: 0; @top-left { content: none } @top-right { content: none } @bottom-center { content: none } }
+@page part  { margin: 0; @top-left { content: none } @top-right { content: none } @bottom-center { content: none } }
+@page front { @top-left { content: none } }
+
+:root {
+  --ink: #0f172a; --muted: #475569; --line: #e2e8f0;
+  --navy: #0b1220; --cyan: #0891b2; --cyan-soft: #ecfeff;
+}
+
+html { font-family: "Inter", "DejaVu Sans", sans-serif; font-size: 9.6pt; line-height: 1.55; color: var(--ink); }
+body { margin: 0; }
+
+p { margin: 0 0 2.6mm; text-align: justify; hyphens: auto; }
+ul, ol { margin: 0 0 3mm; padding-left: 6mm; }
+li { margin-bottom: 1mm; }
+li > p { margin-bottom: 1mm; }
+strong, b { font-weight: 650; }
+a { color: var(--cyan); text-decoration: none; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 5mm 0; }
+
+/* ===================== Títulos ===================== */
+h1, h2, h3, h4 { font-family: "Inter Display", "Inter", sans-serif; line-height: 1.25; break-after: avoid; }
+h2 {
+  font-size: 14.5pt; font-weight: 700; color: var(--navy);
+  margin: 9mm 0 3.5mm; padding-bottom: 1.6mm; border-bottom: 1.4px solid var(--line);
+  bookmark-level: 3; bookmark-label: attr(data-label);
+}
+h3 {
+  font-size: 11.2pt; font-weight: 650; color: #0e7490; margin: 6mm 0 2.4mm;
+  bookmark-level: 4; bookmark-label: attr(data-label);
+}
+h4 { font-size: 10pt; font-weight: 650; margin: 4mm 0 2mm; bookmark-level: none; }
+h2 .num, h3 .num { color: var(--cyan); font-weight: 700; margin-right: 1.5mm; }
+h2 .back {
+  float: right; font: 500 7.2pt "Inter"; color: #64748b; margin-top: 2.2mm;
+  border: 0.7px solid #cbd5e1; border-radius: 3px; padding: 0.5mm 1.8mm;
+}
+
+/* ===================== Portada ===================== */
+.cover {
+  page: cover; height: 297mm; box-sizing: border-box; padding: 48mm 22mm 20mm;
+  background: linear-gradient(160deg, #0b1220 0%, #0f1d33 55%, #0b3a4a 100%); color: #e2e8f0;
+  position: relative; break-after: page;
+}
+.cover-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(34,211,238,.07) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(34,211,238,.07) 1px, transparent 1px);
+  background-size: 12mm 12mm;
+}
+.cover-kicker { font: 600 10pt "Inter"; letter-spacing: .25em; text-transform: uppercase; color: #22d3ee; position: relative; }
+.cover-title { font: 800 30pt/1.15 "Inter Display"; color: #fff; margin: 6mm 0 8mm; position: relative; bookmark-level: none; }
+.cover-title span { color: #67e8f9; }
+.cover-sub { font: 400 11pt/1.6 "Inter"; color: #cbd5e1; max-width: 140mm; position: relative; text-align: left; }
+.cover-block {
+  display: inline-block; margin-top: 12mm; padding: 2.5mm 5mm; border: 1px solid #22d3ee; border-radius: 2mm;
+  font: 600 10pt "Inter"; color: #a5f3fc; position: relative;
+}
+.cover-foot { position: absolute; left: 22mm; bottom: 22mm; font: 400 9.5pt "Inter"; color: #94a3b8; }
+.cover-foot p { margin: 0 0 1mm; text-align: left; }
+
+/* ===================== Índice ===================== */
+.toc { page: front; break-after: page; bookmark-level: 1; bookmark-label: "Índice"; }
+.toc-title { font: 800 24pt "Inter Display"; color: var(--navy); margin: 0 0 3mm; bookmark-level: none; }
+.toc-help { color: var(--muted); font-size: 8.8pt; margin-bottom: 6mm; text-align: left; }
+.toc-list, .toc-pending { list-style: none; padding: 0; margin: 0; }
+.toc-list li { margin: 0; }
+.toc-list a { color: var(--ink); display: block; }
+.toc-list a::after {
+  content: leader(".") target-counter(attr(href), page);
+  color: #64748b; font-weight: 500;
+}
+.t-part { margin-top: 5mm !important; padding: 1.5mm 2.5mm; background: var(--navy); border-radius: 1.5mm; break-after: avoid; }
+.t-part a { color: #fff !important; font-weight: 700; font-size: 10.5pt; }
+.t-part a::after { color: #67e8f9 !important; }
+.t-part .tl { color: #67e8f9; margin-right: 1.5mm; }
+.t-chap { margin-top: 2.6mm !important; break-after: avoid; }
+.t-chap a { font-weight: 650; font-size: 10pt; }
+.t-chap .tl { display: inline-block; width: 8mm; color: var(--cyan); }
+.t-sec { padding-left: 8mm; font-size: 9pt; line-height: 1.6; }
+.t-sec .tl { display: inline-block; width: 10mm; color: #64748b; }
+.toc-pending-title { font-size: 12pt; border: 0; margin-top: 9mm; color: #64748b; bookmark-level: none; }
+.toc-pending { color: #94a3b8; font-size: 8.8pt; }
+.pending-part { margin-bottom: 2.5mm; }
+.pending-part .pl { font-weight: 700; margin-right: 1mm; }
+.pending-part .pend {
+  margin-left: 2mm; font-size: 7pt; border: 0.6px solid #cbd5e1; border-radius: 2px; padding: 0 1.2mm; color: #64748b;
+}
+.pending-part ul { list-style: none; padding-left: 8mm; margin: 0.8mm 0 0; }
+.pending-part ul li { margin: 0; }
+.pending-part .n { display: inline-block; width: 7mm; }
+
+/* ===================== Introducción ===================== */
+.intro { page: front; break-after: page; }
+.intro .intro-head { bookmark-level: 1; bookmark-label: "Cómo usar esta guía"; }
+.intro-head h1 { font: 800 22pt "Inter Display"; color: var(--navy); margin: 0 0 2mm; bookmark-level: none; }
+.intro h2 { bookmark-level: 2; }
+
+/* ===================== Partes ===================== */
+.part-page {
+  page: part; height: 297mm; box-sizing: border-box; padding: 70mm 24mm 0;
+  background: linear-gradient(165deg, #0b1220 0%, #10233d 100%); color: #e2e8f0; break-before: page; break-after: page;
+  bookmark-level: 1; bookmark-label: attr(data-label);
+}
+.part-kicker { font: 700 12pt "Inter"; letter-spacing: .3em; text-transform: uppercase; color: #22d3ee; margin: 0; }
+.part-title { font: 800 34pt "Inter Display"; color: #fff; margin: 3mm 0 12mm; bookmark-level: none; }
+.part-toc { list-style: none; padding: 0; border-top: 1px solid #1e3a5f; }
+.part-toc li { border-bottom: 1px solid #1e3a5f; margin: 0; }
+.part-toc a { display: block; padding: 3mm 0; color: #e2e8f0; font: 500 11.5pt "Inter"; }
+.part-toc a span { color: #67e8f9; font-weight: 700; display: inline-block; width: 10mm; }
+.part-toc a::after { content: leader(" ") "pág. " target-counter(attr(href), page); color: #64748b; font-size: 9pt; }
+.part-page .back { display: inline-block; margin-top: 10mm; color: #67e8f9; font: 600 9pt "Inter"; border: 1px solid #22d3ee; padding: 1.5mm 3.5mm; border-radius: 1.5mm; }
+
+/* ===================== Capítulos ===================== */
+.chapter { break-before: page; }
+.chapter-head {
+  string-set: chapter attr(data-chapter);
+  bookmark-level: 2; bookmark-label: attr(data-label);
+  border-left: 2.2mm solid var(--cyan); padding: 1mm 0 1mm 5mm; margin-bottom: 7mm;
+}
+.annex .chapter-head { string-set: chapter attr(data-label); }
+.chapter-kicker { font: 700 8.5pt "Inter"; letter-spacing: .2em; text-transform: uppercase; color: var(--cyan); margin: 0 0 1.5mm; }
+.chapter-head h1 { font: 800 22pt/1.15 "Inter Display"; color: var(--navy); margin: 0 0 3mm; bookmark-level: none; }
+.chapter-head .back { font: 500 7.5pt "Inter"; color: #64748b; border: 0.7px solid #cbd5e1; border-radius: 3px; padding: 0.5mm 1.8mm; }
+.minitoc { margin-top: 5mm; background: #f8fafc; border: 0.7px solid var(--line); border-radius: 2mm; padding: 3mm 5mm 2mm; }
+.minitoc p { font: 700 7.5pt "Inter"; letter-spacing: .12em; text-transform: uppercase; color: #64748b; margin: 0 0 1.5mm; }
+.minitoc ol { list-style: none; padding: 0; margin: 0; columns: 2; column-gap: 8mm; }
+.minitoc li { font-size: 8.6pt; margin: 0 0 0.8mm; break-inside: avoid; }
+.minitoc a { color: var(--ink); }
+
+/* ===================== Código ===================== */
+code {
+  font-family: "DejaVu Sans Mono", monospace; font-size: 8.2pt;
+  background: #f1f5f9; border-radius: 2px; padding: 0.2mm 0.8mm; color: #0f3c57;
+}
+h2 code, h3 code { font-size: 0.9em; background: none; color: inherit; padding: 0; }
+.hl { background: #f8fafc !important; border: 0.7px solid #e2e8f0; border-radius: 1.6mm; margin: 0 0 3.5mm; padding: 2.6mm 3.4mm; }
+.hl pre { margin: 0; font-family: "DejaVu Sans Mono", monospace; font-size: 7.7pt; line-height: 1.45; white-space: pre-wrap; word-wrap: break-word; }
+.hl code { background: none; padding: 0; font-size: inherit; color: inherit; }
+.file {
+  font: 600 7.2pt "DejaVu Sans Mono"; color: #0e7490; background: #ecfeff; border: 0.7px solid #a5f3fc;
+  border-bottom: 0; display: block; width: fit-content; padding: 0.6mm 2.4mm; border-radius: 1.4mm 1.4mm 0 0; margin: 1mm 0 0 2mm;
+  break-after: avoid;
+}
+.file + .hl, .file + div.hl { margin-top: 0; }
+pre { break-inside: auto; }
+
+/* ===================== Tablas ===================== */
+table { width: 100%; border-collapse: collapse; margin: 1mm 0 4mm; font-size: 8.6pt; break-inside: auto; }
+thead { display: table-header-group; }
+th { background: #0f172a; color: #fff; font-weight: 600; text-align: left; padding: 1.6mm 2.2mm; }
+td { border-bottom: 0.7px solid var(--line); padding: 1.5mm 2.2mm; vertical-align: top; }
+tr:nth-child(even) td { background: #f8fafc; }
+td code { font-size: 7.6pt; }
+
+/* ===================== Recuadros ===================== */
+.callout {
+  border: 0.8px solid; border-left-width: 1.6mm; border-radius: 1.6mm;
+  padding: 2.6mm 4mm 1.2mm; margin: 2mm 0 4.5mm; break-inside: avoid-page;
+}
+.callout-title { font: 700 8.6pt "Inter"; letter-spacing: .02em; margin-bottom: 1.6mm !important; text-align: left !important; }
+.callout p, .callout li { font-size: 9pt; }
+.callout .hl { background: #fff !important; }
+.callout .xref { float: right; font: 600 7.5pt "Inter"; }
+
+.java      { border-color: #fdba74; background: #fff7ed; }  .java .callout-title { color: #c2410c; }
+.proyecto  { border-color: #67e8f9; background: #ecfeff; }  .proyecto .callout-title { color: #0e7490; }
+.nota      { border-color: #cbd5e1; background: #f8fafc; }  .nota .callout-title { color: #334155; }
+.atencion  { border-color: #fcd34d; background: #fffbeb; }  .atencion .callout-title { color: #b45309; }
+.decision  { border-color: #c4b5fd; background: #f5f3ff; }  .decision .callout-title { color: #6d28d9; }
+.ejercicio, .solucion { border-color: #6ee7b7; background: #ecfdf5; } .ejercicio .callout-title, .solucion .callout-title { color: #047857; }
+.preguntas, .respuestas { border-color: #93c5fd; background: #eff6ff; } .preguntas .callout-title, .respuestas .callout-title { color: #1d4ed8; }
+.ejercicio, .solucion, .preguntas, .respuestas { break-inside: auto; }
+
+/* ===================== Diagramas ===================== */
+figure { margin: 3mm 0 5mm; break-inside: avoid; text-align: center; }
+figure svg { max-width: 100%; height: auto; }
+figcaption { font-size: 8pt; color: var(--muted); margin-top: 1.5mm; text-align: center; }
+figcaption b { color: var(--cyan); }
+
+.lead { font-size: 10.4pt; color: #334155; }
+.small { font-size: 8.4pt; color: var(--muted); }
+.hl .err { border: none !important; background: none !important; color: inherit !important; }
+.callout p, .callout li { text-align: left; }
+td, th { text-align: left; }
+th code { background: transparent; color: #a5f3fc; padding: 0; }
+.t-static { color: #fff; font-weight: 700; font-size: 10.5pt; }
+.t-static .tt { color: #fff; }
+tr { break-inside: avoid; }
+.annex .chapter-head { bookmark-level: 1; }
+
+/* ===================== Guía backend ===================== */
+@page { @top-right { content: "IT Service & Demand Manager · Guía backend"; } }
+.part-group { font: 600 8.5pt "Inter"; letter-spacing: .14em; text-transform: uppercase; color: #94a3b8; margin: 0 0 8mm; }
+.t-group { margin-top: 7mm !important; padding: 0 0 1mm; border-bottom: 1.6px solid #0891b2; break-after: avoid; }
+.t-group .tl { font: 800 11pt "Inter Display"; color: #0891b2; margin-right: 2mm; }
+.t-group .tt { font: 600 10.5pt "Inter"; color: var(--navy); }
+.t-part .tl { display: inline-block; min-width: 14mm; }
+h2 .back.step { margin-right: 1.5mm; color: #0e7490; border-color: #a5f3fc; background: #ecfeff; }
+.tag { display: inline-block; font: 700 6.6pt "Inter"; letter-spacing: .04em; text-transform: uppercase;
+  border-radius: 2px; padding: 0.15mm 1.3mm; margin: 0 0.8mm; vertical-align: 0.4mm; border: 0.6px solid; line-height: 1.5; }
+.file .tag { margin-left: 2mm; vertical-align: 0.2mm; }
+.tag-impl { color: #047857; background: #ecfdf5; border-color: #6ee7b7; }
+.tag-desp { color: #1d4ed8; background: #eff6ff; border-color: #93c5fd; }
+.tag-ref  { color: #6d28d9; background: #f5f3ff; border-color: #c4b5fd; }
+.tag-fin  { color: #0e7490; background: #ecfeff; border-color: #67e8f9; }
+.tag-pend { color: #b45309; background: #fffbeb; border-color: #fcd34d; }
+.tag-rec  { color: #be123c; background: #fff1f2; border-color: #fda4af; }
+.mapa { margin: 0 0 5mm; break-inside: auto; }
+.mapa-title { font: 700 10.5pt "Inter"; color: var(--navy); margin: 5mm 0 1.5mm !important; break-after: avoid; text-align: left !important; }
+.mapa-title span { background: var(--navy); color: #67e8f9; border-radius: 1.2mm; padding: 0.5mm 2mm; margin-right: 1.5mm; font-size: 9pt; }
+.mapa-t td { padding: 1.1mm 2mm; font-size: 8.8pt; }
+.mapa-t td.pn { width: 9mm; font-weight: 700; }
+.mapa-t td.pl { width: 18mm; white-space: nowrap; text-align: right; font-size: 8pt; }
+.leccion { border-color: #f9a8d4; background: #fdf2f8; } .leccion .callout-title { color: #be185d; }
+.pendiente { border-color: #fcd34d; background: #fffbeb; } .pendiente .callout-title { color: #b45309; }
+.reconstruido { border-color: #fda4af; background: #fff1f2; } .reconstruido .callout-title { color: #be123c; }
+blockquote { margin: 2mm 0 4mm; padding: 2mm 4mm; border-left: 1.2mm solid #94a3b8; background: #f8fafc; color: #334155; font-style: italic; break-inside: avoid; }
+blockquote p { margin: 0 0 1.5mm; }
+h3 .tag { font-style: normal; vertical-align: 0.6mm; }

@@ -1,0 +1,28 @@
+# Secretos y configuración local
+.env
+.env.*
+!.env.example
+*.local
+*.dump
+*.backup
+
+# Compilados y dependencias
+**/target/
+**/node_modules/
+**/dist/
+**/coverage/
+**/.vite/
+*.tsbuildinfo
+**/build/
+
+# IDE y sistema
+**/.metadata/
+**/.settings/
+**/.idea/
+**/.vscode/
+.classpath
+.project
+.factorypath
+*.iml
+.DS_Store
+Thumbs.db

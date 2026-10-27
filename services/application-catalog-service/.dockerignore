@@ -1,0 +1,17 @@
+# Solo pom.xml y src/ son necesarios para construir la imagen.
+target/
+.git/
+.metadata/
+.settings/
+.mvn/
+.classpath
+.project
+.factorypath
+.vscode/
+.idea/
+*.iml
+.env
+*.dump
+*backup*.sql
+docs/
+HELP.md

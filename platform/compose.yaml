@@ -1,0 +1,105 @@
+# IT Service & Demand Manager · plataforma completa
+#
+#   docker compose up -d --build
+#
+# Levanta PostgreSQL, los dos microservicios y el frontend (nginx):
+#   http://localhost:8088
+#
+# Para desarrollar el frontend se puede seguir usando Vite (npm run dev, puerto
+# 5173), que llega a los servicios por los puertos publicados 8080 y 8081.
+#
+# Los secretos se leen de un fichero .env junto a este (ver .env.example),
+# que NO se versiona.
+
+name: it-service-manager-platform
+
+services:
+
+  postgres:
+    image: postgres:18.6
+    environment:
+      POSTGRES_DB: it_service_manager
+      POSTGRES_USER: itmanager
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Define DB_PASSWORD en .env}
+      # Lo usa el script de inicialización para crear el usuario del catálogo.
+      APPLICATION_DB_PASSWORD: ${APPLICATION_DB_PASSWORD:?Define APPLICATION_DB_PASSWORD en .env}
+    ports:
+      # Publicado solo para herramientas de desarrollo (pgAdmin, Spring Tools).
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      # Solo se ejecuta si el volumen está vacío (instalación nueva).
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  application-catalog-service:
+    build: ../services/application-catalog-service
+    image: application-catalog-service:local
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/application_db
+      DB_USERNAME: application_user
+      DB_PASSWORD: ${APPLICATION_DB_PASSWORD:?Define APPLICATION_DB_PASSWORD en .env}
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      # La imagen no incluye curl: petición HTTP mínima con bash.
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \"GET /actuator/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n\" >&3; grep -q UP <&3'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    restart: unless-stopped
+
+  demand-service:
+    build: ../services/demand-service
+    image: demand-service:local
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/it_service_manager
+      DB_USERNAME: itmanager
+      DB_PASSWORD: ${DB_PASSWORD:?Define DB_PASSWORD en .env}
+      # Dentro de la red de Compose el catálogo se localiza por su nombre de servicio.
+      APPLICATION_CATALOG_BASE_URL: http://application-catalog-service:8081
+    ports:
+      - "8080:8080"
+    depends_on:
+      # Solo necesita su base de datos para arrancar. Si el catálogo no está,
+      # arranca igual y responde 503 en lo que dependa de él.
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \"GET /actuator/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n\" >&3; grep -q UP <&3'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    restart: unless-stopped
+
+  web:
+    build: ../web
+    image: it-service-manager-web:local
+    ports:
+      - "8088:80"
+    depends_on:
+      # nginx resuelve los servicios en cada petición: puede arrancar sin esperar.
+      - demand-service
+      - application-catalog-service
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  # Volumen con nombre: los datos se conservan entre reinicios y con
+  # "docker compose down". Solo "docker compose down -v" lo elimina.
+  postgres_data:
